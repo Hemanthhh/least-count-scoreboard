@@ -1,0 +1,25 @@
+<section class="history-section" *ngIf="rounds.length > 0">
+    <h3>Game History</h3>
+    <div class="rounds-history">
+        <div class="round-item" *ngFor="let round of rounds">
+            <div class="round-header">
+                <h4>Round {{ round.id }}</h4>
+                <div class="round-actions">
+                    <span class="round-time">{{ round.timestamp | date:'shortTime' }}</span>
+                    <button *ngIf="!gameEnded" class="edit-round-btn" (click)="editRound(round.id)"
+                        [disabled]="editingRound !== null">
+                        Edit
+                    </button>
+                </div>
+            </div>
+            <div class="round-scores">
+                <div class="round-score-item" *ngFor="let score of round.scores">
+                    <span class="player-name">
+                        {{ getPlayerName(score.playerId) }}:
+                    </span>
+                    <span class="score-value">+{{ score.score }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,183 @@
+/* Game End Section */
+.game-end-section {
+    background: #273F4F;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid #447D9B;
+}
+
+.game-end-section h2 {
+    color: #D7D7D7;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #447D9B;
+    padding-bottom: 10px;
+}
+
+.game-end-section h3 {
+    color: #D7D7D7;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.game-result {
+    margin-bottom: 30px;
+}
+
+.winner-announcement {
+    background: linear-gradient(135deg, #FE7743 0%, #e65a2b 100%);
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(254, 119, 67, 0.3);
+}
+
+.winner-announcement h3 {
+    font-size: 2rem;
+    margin: 0;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.no-winner {
+    background: #447D9B;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    border: 2px solid #FE7743;
+}
+
+.final-results {
+    margin-bottom: 30px;
+}
+
+.results-table {
+    background: #447D9B;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #FE7743;
+}
+
+.result-header {
+    background: #273F4F;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 60px 1fr 100px 120px;
+    gap: 15px;
+    font-weight: 600;
+    color: #D7D7D7;
+    border-bottom: 2px solid #447D9B;
+}
+
+.result-row {
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 60px 1fr 100px 120px;
+    gap: 15px;
+    align-items: center;
+    border-bottom: 1px solid #273F4F;
+    transition: background-color 0.3s ease;
+}
+
+.result-row:hover {
+    background: #3a6b8a;
+}
+
+.result-row.winner {
+    background: rgba(254, 119, 67, 0.1);
+    border-left: 4px solid #FE7743;
+}
+
+.rank {
+    font-weight: 600;
+    color: #FE7743;
+}
+
+.final-score {
+    font-weight: 600;
+    color: #D7D7D7;
+}
+
+.final-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.final-status.active {
+    background: #FE7743;
+    color: white;
+}
+
+.final-status.over-limit {
+    background: #e53e3e;
+    color: white;
+}
+
+.final-status.eliminated {
+    background: #666;
+    color: white;
+}
+
+/* Game End Actions */
+.reset-btn {
+    padding: 15px 30px;
+    background: #FE7743;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.game-end-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.reset-btn:hover {
+    background: #e65a2b;
+}
+
+.clear-btn {
+    padding: 15px 30px;
+    background: #447D9B;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-btn:hover {
+    background: #3a6b8a;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    .result-header,
+    .result-row {
+        grid-template-columns: 50px 1fr 80px 100px;
+        gap: 10px;
+        font-size: 0.9rem;
+    }
+
+    .game-end-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}

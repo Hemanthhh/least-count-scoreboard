@@ -3,183 +3,25 @@
     <h1>{{ title }}</h1>
   </header>
 
-  <!-- Game Setup Section -->
-  <section class="setup-section" *ngIf="!gameInProgress && !gameEnded">
-    <h2>Game Setup</h2>
+  <!-- Game Setup Component -->
+  <app-game-setup *ngIf="!gameInProgress && !gameEnded" [players]="players" [gameInProgress]="gameInProgress"
+    (addPlayerEvent)="addPlayer($event)" (removePlayerEvent)="removePlayer($event)"
+    (clearAllPlayersEvent)="clearAllPlayers()" (startGameEvent)="startGame()">
+  </app-game-setup>
 
-    <!-- Add Players -->
-    <div class="add-player-section">
-      <h3>Add Players</h3>
-      <div class="player-input">
-        <input type="text" [(ngModel)]="newPlayerName" placeholder="Enter player name" (keyup.enter)="addPlayer()"
-          maxlength="20">
-        <button (click)="addPlayer()" [disabled]="!newPlayerName.trim()">
-          Add Player
-        </button>
-      </div>
+  <!-- Game Progress Component -->
+  <app-game-progress *ngIf="gameInProgress" [players]="players" [currentRound]="currentRound"
+    [roundScores]="roundScores" [editingRound]="editingRound" (submitRoundEvent)="submitRound()"
+    (saveRoundEditEvent)="saveRoundEdit()" (cancelRoundEditEvent)="cancelRoundEdit()">
+  </app-game-progress>
 
-      <!-- Player List -->
-      <div class="player-list" *ngIf="players.length > 0">
-        <div class="player-list-header">
-          <h4>Players ({{ players.length }})</h4>
-          <button class="clear-all-btn" (click)="clearAllPlayers()">
-            Clear All
-          </button>
-        </div>
-        <div class="player-item" *ngFor="let player of players">
-          <span class="player-name">{{ player.name }}</span>
-          <button class="remove-btn" (click)="removePlayer(player.id)">
-            Remove
-          </button>
-        </div>
-      </div>
-    </div>
+  <!-- Game End Component -->
+  <app-game-end *ngIf="gameEnded" [players]="players" [winner]="winner" (resetGameEvent)="resetGame()"
+    (clearAllPlayersEvent)="clearAllPlayers()">
+  </app-game-end>
 
-    <!-- Start Game Button -->
-    <div class="start-game-section">
-      <button class="start-btn" (click)="startGame()" [disabled]="players.length < 2">
-        Start Game ({{ players.length }}/2+ players)
-      </button>
-    </div>
-  </section>
-
-  <!-- Game in Progress Section -->
-  <section class="game-section" *ngIf="gameInProgress">
-    <div class="game-header-info">
-      <h2>Round {{ currentRound }}</h2>
-      <div class="game-stats">
-        <span class="stat">Active Players: {{ getActivePlayers().length }}</span>
-        <span class="stat">Total Players: {{ players.length }}</span>
-      </div>
-    </div>
-
-    <!-- Score Input Section -->
-    <div class="score-input-section">
-      <h3 *ngIf="editingRound === null">Enter Round {{ currentRound }} Scores</h3>
-      <h3 *ngIf="editingRound !== null">Edit Round {{ editingRound }} Scores</h3>
-      <div class="score-inputs">
-        <div class="score-input-item" *ngFor="let player of getActivePlayers()">
-          <label>{{ player.name }}</label>
-          <div class="score-input-group">
-            <input type="number" [(ngModel)]="roundScores[player.id]" placeholder="" min="0" max="100"
-              class="score-input">
-            <span class="total-score">Total: {{ getPlayerTotalScore(player.id) }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="round-actions">
-        <button *ngIf="editingRound === null" class="submit-round-btn" (click)="submitRound()"
-          [disabled]="getActivePlayers().length === 0">
-          Submit Round
-        </button>
-        <button *ngIf="editingRound !== null" class="save-edit-btn" (click)="saveRoundEdit()">
-          Save Changes
-        </button>
-        <button *ngIf="editingRound !== null" class="cancel-edit-btn" (click)="cancelRoundEdit()">
-          Cancel
-        </button>
-      </div>
-    </div>
-
-    <!-- Player Status Section -->
-    <div class="player-status-section">
-      <h3>Player Status</h3>
-      <div class="player-grid">
-        <div class="player-card" *ngFor="let player of players" [class]="getPlayerStatusClass(player)">
-          <div class="player-header">
-            <h4>{{ player.name }}</h4>
-            <span class="status-badge" [class]="getPlayerStatusClass(player)">
-              {{ getPlayerStatus(player) }}
-            </span>
-          </div>
-          <div class="player-score">
-            <span class="score-label">Total Score:</span>
-            <span class="score-value">{{ player.score }}</span>
-          </div>
-          <div class="player-rounds" *ngIf="player.rounds.length > 0">
-            <span class="rounds-label">Rounds:</span>
-            <div class="rounds-list">
-              <span class="round-score" *ngFor="let roundScore of player.rounds; let i = index">
-                {{ roundScore }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Game End Section -->
-  <section class="game-end-section" *ngIf="gameEnded">
-    <div class="game-result">
-      <h2>Game Over!</h2>
-      <div class="winner-announcement" *ngIf="winner">
-        <h3>🏆 Winner: {{ winner.name }} 🏆</h3>
-        <p>Final Score: {{ winner.score }}</p>
-      </div>
-      <div class="no-winner" *ngIf="!winner">
-        <h3>No Winner</h3>
-        <p>All players were eliminated!</p>
-      </div>
-    </div>
-
-    <!-- Final Results -->
-    <div class="final-results">
-      <h3>Final Results</h3>
-      <div class="results-table">
-        <div class="result-header">
-          <span>Rank</span>
-          <span>Player</span>
-          <span>Final Score</span>
-          <span>Status</span>
-        </div>
-        <div class="result-row" *ngFor="let player of players; let i = index"
-          [class.winner]="winner && player.id === winner.id">
-          <span class="rank">{{ i + 1 }}</span>
-          <span class="player-name">{{ player.name }}</span>
-          <span class="final-score">{{ player.score }}</span>
-          <span class="final-status" [class]="getPlayerStatusClass(player)">
-            {{ getPlayerStatus(player) }}
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <div class="game-end-actions">
-      <button class="reset-btn" (click)="resetGame()">
-        Start New Game (Keep Players)
-      </button>
-      <button class="clear-btn" (click)="clearAllPlayers()">
-        Clear All Players
-      </button>
-    </div>
-  </section>
-
-  <!-- Game History -->
-  <section class="history-section" *ngIf="rounds.length > 0">
-    <h3>Game History</h3>
-    <div class="rounds-history">
-      <div class="round-item" *ngFor="let round of rounds">
-        <div class="round-header">
-          <h4>Round {{ round.id }}</h4>
-          <div class="round-actions">
-            <span class="round-time">{{ round.timestamp | date:'shortTime' }}</span>
-            <button *ngIf="!gameEnded" class="edit-round-btn" (click)="editRound(round.id)"
-              [disabled]="editingRound !== null">
-              Edit
-            </button>
-          </div>
-        </div>
-        <div class="round-scores">
-          <div class="round-score-item" *ngFor="let score of round.scores">
-            <span class="player-name">
-              {{ getPlayerName(score.playerId) }}:
-            </span>
-            <span class="score-value">+{{ score.score }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Game History Component -->
+  <app-game-history [rounds]="rounds" [gameEnded]="gameEnded" [editingRound]="editingRound" [players]="players"
+    (editRoundEvent)="editRound($event)">
+  </app-game-history>
 </div>

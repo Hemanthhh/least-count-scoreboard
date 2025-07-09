@@ -1,0 +1,65 @@
+<section class="game-section">
+    <div class="game-header-info">
+        <h2>Round {{ currentRound }}</h2>
+        <div class="game-stats">
+            <span class="stat">Active Players: {{ getActivePlayers().length }}</span>
+            <span class="stat">Total Players: {{ players.length }}</span>
+        </div>
+    </div>
+
+    <!-- Score Input Section -->
+    <div class="score-input-section">
+        <h3 *ngIf="editingRound === null">Enter Round {{ currentRound }} Scores</h3>
+        <h3 *ngIf="editingRound !== null">Edit Round {{ editingRound }} Scores</h3>
+        <div class="score-inputs">
+            <div class="score-input-item" *ngFor="let player of getActivePlayers()">
+                <label>{{ player.name }}</label>
+                <div class="score-input-group">
+                    <input type="number" [(ngModel)]="roundScores[player.id]" placeholder="" min="0" max="100"
+                        class="score-input">
+                    <span class="total-score">Total: {{ getPlayerTotalScore(player.id) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="round-actions">
+            <button *ngIf="editingRound === null" class="submit-round-btn" (click)="submitRound()"
+                [disabled]="getActivePlayers().length === 0">
+                Submit Round
+            </button>
+            <button *ngIf="editingRound !== null" class="save-edit-btn" (click)="saveRoundEdit()">
+                Save Changes
+            </button>
+            <button *ngIf="editingRound !== null" class="cancel-edit-btn" (click)="cancelRoundEdit()">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <!-- Player Status Section -->
+    <div class="player-status-section">
+        <h3>Player Status</h3>
+        <div class="player-grid">
+            <div class="player-card" *ngFor="let player of players" [class]="getPlayerStatusClass(player)">
+                <div class="player-header">
+                    <h4>{{ player.name }}</h4>
+                    <span class="status-badge" [class]="getPlayerStatusClass(player)">
+                        {{ getPlayerStatus(player) }}
+                    </span>
+                </div>
+                <div class="player-score">
+                    <span class="score-label">Total Score:</span>
+                    <span class="score-value">{{ player.score }}</span>
+                </div>
+                <div class="player-rounds" *ngIf="player.rounds.length > 0">
+                    <span class="rounds-label">Rounds:</span>
+                    <div class="rounds-list">
+                        <span class="round-score" *ngFor="let roundScore of player.rounds; let i = index">
+                            {{ roundScore }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

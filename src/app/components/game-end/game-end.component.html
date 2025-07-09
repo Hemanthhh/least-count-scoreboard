@@ -1,0 +1,44 @@
+<section class="game-end-section">
+    <div class="game-result">
+        <h2>Game Over!</h2>
+        <div class="winner-announcement" *ngIf="winner">
+            <h3>🏆 Winner: {{ winner.name }} 🏆</h3>
+            <p>Final Score: {{ winner.score }}</p>
+        </div>
+        <div class="no-winner" *ngIf="!winner">
+            <h3>No Winner</h3>
+            <p>All players were eliminated!</p>
+        </div>
+    </div>
+
+    <!-- Final Results -->
+    <div class="final-results">
+        <h3>Final Results</h3>
+        <div class="results-table">
+            <div class="result-header">
+                <span>Rank</span>
+                <span>Player</span>
+                <span>Final Score</span>
+                <span>Status</span>
+            </div>
+            <div class="result-row" *ngFor="let player of players; let i = index"
+                [class.winner]="winner && player.id === winner.id">
+                <span class="rank">{{ i + 1 }}</span>
+                <span class="player-name">{{ player.name }}</span>
+                <span class="final-score">{{ player.score }}</span>
+                <span class="final-status" [class]="getPlayerStatusClass(player)">
+                    {{ getPlayerStatus(player) }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-end-actions">
+        <button class="reset-btn" (click)="resetGame()">
+            Start New Game (Keep Players)
+        </button>
+        <button class="clear-btn" (click)="clearAllPlayers()">
+            Clear All Players
+        </button>
+    </div>
+</section>

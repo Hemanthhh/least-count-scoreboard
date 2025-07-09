@@ -1,24 +1,22 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Player {
-  id: number;
-  name: string;
-  score: number;
-  isEliminated: boolean;
-  rounds: number[];
-}
-
-interface Round {
-  id: number;
-  scores: { playerId: number; score: number }[];
-  timestamp: Date;
-}
+import { Player, Round } from './shared/interfaces';
+import { GameSetupComponent } from './components/game-setup/game-setup.component';
+import { GameProgressComponent } from './components/game-progress/game-progress.component';
+import { GameEndComponent } from './components/game-end/game-end.component';
+import { GameHistoryComponent } from './components/game-history/game-history.component';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    GameSetupComponent,
+    GameProgressComponent,
+    GameEndComponent,
+    GameHistoryComponent
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -36,17 +34,16 @@ export class App {
   roundScores: { [playerId: number]: number | undefined } = {};
   editingRound: number | null = null;
 
-  addPlayer() {
-    if (this.newPlayerName.trim() && !this.gameInProgress) {
+  addPlayer(playerName: string) {
+    if (playerName.trim() && !this.gameInProgress) {
       const player: Player = {
         id: Date.now(),
-        name: this.newPlayerName.trim(),
+        name: playerName.trim(),
         score: 0,
         isEliminated: false,
         rounds: []
       };
       this.players.push(player);
-      this.newPlayerName = '';
     }
   }
 
